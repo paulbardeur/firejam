@@ -10,7 +10,9 @@
 
     #include <SFML/Graphics.hpp>
 
-namespace Firejame {
+    #define OBSTACLE_TEXTURE "assets/ostacle.png"
+
+namespace Firejam {
 
     class Obstacle {
 
@@ -18,8 +20,8 @@ namespace Firejame {
 
             Obstacle(sf::Vector2f position);
 
-            sf::FloatRect getBounds() const;
-            sf::Sprite getSprite() const;
+            sf::FloatRect getBounds() const { return _sprite.getGlobalBounds(); };
+            sf::Sprite getSprite() const { return _sprite; };
  
         private:
 
