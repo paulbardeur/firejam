@@ -9,6 +9,7 @@
     #define GAME_HPP_
 
     #include <vector>
+    #include <memory>
     #include <SFML/Graphics.hpp>
 
     #include "Gem.hpp"
@@ -24,7 +25,7 @@ namespace Firejam {
 
         public:
 
-            Game() = default;
+            Game();
 
             int run();
 
@@ -41,7 +42,7 @@ namespace Firejam {
 
             bool _isRunning;
 
-            std::vector<Gem> _gems;
+            std::vector<std::shared_ptr<Gem>> _gems;
             std::vector<Obstacle> _obstacles;
             std::vector<Environment> _environments;
 

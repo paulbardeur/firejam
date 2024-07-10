@@ -8,17 +8,21 @@
 CXX			=	g++
 CXXFLAGS	+=	-std=c++2a -Wall -Wextra -Werror
 CPPFLAGS	+=	-iquote $(INC_DIR)
-
+LDFLAGS		=	-lsfml-graphics -lsfml-window -lsfml-system
 
 SRC_DIR		=	./src
 INC_DIR		=	./includes
 
-MAIN		=	$(SRC_DIR)/Main.cpp			\
+MAIN		=	$(SRC_DIR)/Main.cpp				\
 
-SRC			=	$(SRC_DIR)/Firejam.cpp		\
+SRC			=	$(SRC_DIR)/Gem.cpp				\
+				$(SRC_DIR)/Game.cpp				\
+				$(SRC_DIR)/Player.cpp			\
+				$(SRC_DIR)/Obstacle.cpp			\
+				$(SRC_DIR)/Environment.cpp		\
 
-SRC_OBJ		=	$(SRC:.cpp=.o)				\
-				$(MAIN:.cpp=.o)				\
+SRC_OBJ		=	$(SRC:.cpp=.o)					\
+				$(MAIN:.cpp=.o)					\
 
 BIN_NAME	=	./firejam
 
@@ -26,7 +30,7 @@ all:  $(BIN_NAME)
 
 
 $(BIN_NAME): $(SRC_OBJ)
-	$(CXX) -o $@ $^ $(CPPFLAGS) $(CXXFLAGS)
+	$(CXX) -o $@ $^ $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 clean:
 	@ $(RM) $(SRC_OBJ)

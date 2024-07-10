@@ -18,7 +18,7 @@ static int help(void)
     return SUCCESS;
 }
 
-int main(int ac, char **av)
+int main(int ac, char **)
 {
     Firejam::Game game;
 

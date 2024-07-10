@@ -10,35 +10,49 @@
 
     #include <SFML/Graphics.hpp>
 
-namespace Firejame {
+    #define FIRE_TEXTURE "assets/fire.png"
+    #define ICE_TEXTURE "assets/ice.png"
 
-    enum PlayerState { FIRE, ICE };
+    #define INITIAL_POSITION 100, 500
+
+    #define GRAVITY 981
+    #define GROUND_LEVEL 500
+    #define JUMP_FORCE -500.0f
+
+    #define DEFAULT_SPEED 200
+
+    #define NONE 0
+
+namespace Firejam {
+
+    enum Type { FIRE, ICE };
 
     class Player {
 
         public:
 
-            Player() = default;
+            Player();
 
-            void collectGem(PlayerState gemType);
-            void move(sf::Time delta);
-            void jump();
+            int collectGem(Type type);
+            int move(sf::Time delta);
+            int jump();
 
-            PlayerState getState() const;
-            sf::FloatRect getBounds() const;
-            sf::Sprite getSprite() const;
+            Type getState() const { return _state; };
+            sf::FloatRect getBounds() const { return _sprite.getGlobalBounds(); };
+            sf::Sprite getSprite() const { return _sprite; };
 
         private:
 
-            void updateSprite();
+            int updateSprite();
 
-            PlayerState _state;
+            Type _state;
     
             sf::Sprite _sprite;
             sf::Texture _fireTexture;
             sf::Texture _iceTexture;
     
-            sf::Vector2f _velocity;
+            float _speed;
+            float _velocity;
     
             bool _isJumping;
 

@@ -17,7 +17,9 @@ Firejam::Game::Game(void): _window(DEFAULT_WINDOW), _isRunning(true)
 
 int Firejam::Game::initGame(void)
 {
-    // gems.push_back(Gem(GemType::FIRE, sf::Vector2f(300, 400)));
+    _gems.push_back(std::make_shared<Gem>(Type::FIRE, sf::Vector2f(300, 450)));
+    _gems.push_back(std::make_shared<Gem>(Type::ICE, sf::Vector2f(600, 450)));
+
     // obstacles.push_back(Obstacle(sf::Vector2f(400, 500)));
     // environments.push_back(Environment(EnvironmentType::FIRE, sf::FloatRect(0, 550, 800, 50)));
 
@@ -70,8 +72,8 @@ int Firejam::Game::update(sf::Time delta)
     _player.move(delta);
 
     for (auto &gem: _gems) {
-        if (_player.getBounds().intersects(gem.getBounds())) {
-            _player.collectGem(gem.getType());
+        if (_player.getBounds().intersects(gem.get()->getBounds())) {
+            _player.collectGem(gem.get()->getType());
         }
     }
 
@@ -94,7 +96,7 @@ int Firejam::Game::render(void)
     _window.draw(_player.getSprite());
 
     for (auto &gem : _gems) {
-        _window.draw(gem.getSprite());
+        _window.draw(gem.get()->getSprite());
     }
 
     for (auto &obstacle : _obstacles) {
