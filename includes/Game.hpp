@@ -16,7 +16,9 @@
     #include "Obstacle.hpp"
     #include "Environment.hpp"
 
-namespace Firejame {
+    #define DEFAULT_WINDOW sf::VideoMode(800, 600), "Firejam"
+
+namespace Firejam {
 
     class Game {
 
@@ -24,15 +26,15 @@ namespace Firejame {
 
             Game() = default;
 
-            void run();
+            int run();
 
         private:
 
-            void initGame();
+            int initGame();
 
-            void processInput();
-            void update(sf::Time delta);
-            void render();
+            int processInput();
+            int update(sf::Time delta);
+            int render();
 
             Player _player;
             sf::RenderWindow _window;

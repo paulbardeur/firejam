@@ -2,12 +2,106 @@
 ** EPITECH PROJECT, 2024
 ** Firejam
 ** File description:
-** Main
+** Game
 */
 
+#include <iostream>
+
+#include "Game.hpp"
 #include "Firejam.hpp"
 
-int firejam(void)
+Firejam::Game::Game(void): _window(DEFAULT_WINDOW), _isRunning(true)
 {
+    initGame();
+}
+
+int Firejam::Game::initGame(void)
+{
+    // gems.push_back(Gem(GemType::FIRE, sf::Vector2f(300, 400)));
+    // obstacles.push_back(Obstacle(sf::Vector2f(400, 500)));
+    // environments.push_back(Environment(EnvironmentType::FIRE, sf::FloatRect(0, 550, 800, 50)));
+
+    return SUCCESS;
+}
+
+int Firejam::Game::run(void)
+{
+    sf::Clock clock;
+
+    while (_window.isOpen()) {
+
+        processInput();
+
+        sf::Time delta = clock.restart();
+
+        update(delta);
+        render();
+
+    }
+
+    return SUCCESS;
+}
+
+int Firejam::Game::processInput(void)
+{
+    sf::Event event;
+
+    while (_window.pollEvent(event)) {
+
+        if (event.type == sf::Event::Closed) {
+            _window.close();
+        }
+
+        if (event.type == sf::Event::KeyPressed) {
+
+            if (event.key.code == sf::Keyboard::Space) {
+                _player.jump();
+            }
+
+        }
+
+    }
+
+    return SUCCESS;
+}
+
+int Firejam::Game::update(sf::Time delta)
+{
+    _player.move(delta);
+
+    for (auto &gem: _gems) {
+        if (_player.getBounds().intersects(gem.getBounds())) {
+            _player.collectGem(gem.getType());
+        }
+    }
+
+    for (auto &env: _environments) {
+        if (_player.getBounds().intersects(env.getBounds())) {
+            if (_player.getState() != env.getType()) {
+                _isRunning = false;
+                _window.close();
+            }
+        }
+    }
+
+    return SUCCESS;
+}
+
+int Firejam::Game::render(void)
+{
+    _window.clear();
+
+    _window.draw(_player.getSprite());
+
+    for (auto &gem : _gems) {
+        _window.draw(gem.getSprite());
+    }
+
+    for (auto &obstacle : _obstacles) {
+        _window.draw(obstacle.getSprite());
+    }
+
+    _window.display();
+
     return SUCCESS;
 }
