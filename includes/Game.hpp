@@ -22,6 +22,12 @@
 
     #define VIEW_DELTA_X 300
 
+    #define SCORE_FONT "assets/stocky.ttf"
+    #define SCORE "Score: "
+    #define SCORE_POSITION 12, 12
+    #define SCORE_SIZE 28
+    #define ONE_POINT 1
+
 namespace Firejam {
 
     class Game {
@@ -38,6 +44,7 @@ namespace Firejam {
 
             int processInput();
             int update(sf::Time delta);
+            int updateScore();
             int render();
 
             Player _player;
@@ -46,6 +53,10 @@ namespace Firejam {
             sf::View _view;
 
             bool _isRunning;
+
+            size_t _score;
+            sf::Font _scoreFont;
+            sf::Text _scoreText;
 
             std::vector<std::shared_ptr<Gem>> _gems;
             std::vector<Obstacle> _obstacles;

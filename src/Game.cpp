@@ -10,7 +10,7 @@
 #include "Game.hpp"
 #include "Firejam.hpp"
 
-Firejam::Game::Game(void): _window(DEFAULT_WINDOW), _view(DEFAULT_VIEW), _isRunning(true)
+Firejam::Game::Game(void): _window(DEFAULT_WINDOW), _view(DEFAULT_VIEW), _isRunning(true), _score(NONE)
 {
     initGame();
 }
@@ -22,6 +22,15 @@ int Firejam::Game::initGame(void)
 
     // obstacles.push_back(Obstacle(sf::Vector2f(400, 500)));
     // environments.push_back(Environment(EnvironmentType::FIRE, sf::FloatRect(0, 550, 800, 50)));
+
+    _scoreFont.loadFromFile(SCORE_FONT);
+
+    _scoreText.setFont(_scoreFont);
+    _scoreText.setCharacterSize(SCORE_SIZE);
+    _scoreText.setFillColor(sf::Color::Red);
+    _scoreText.setPosition(SCORE_POSITION);
+
+    updateScore();
 
     return SUCCESS;
 }
@@ -74,7 +83,7 @@ int Firejam::Game::update(sf::Time delta)
     sf::Vector2f playerPosition = _player.getSprite().getPosition();
 
     _view.setCenter(playerPosition.x + VIEW_DELTA_X, _view.getCenter().y);
-    _window.setView(_view);
+    //_window.setView(_view);
 
     auto gem = _gems.begin();
 
@@ -83,6 +92,8 @@ int Firejam::Game::update(sf::Time delta)
         if (_player.getBounds().intersects(gem->get()->getBounds())) {
             _player.collectGem(gem->get()->getType());
             gem = _gems.erase(gem);
+            _score += ONE_POINT;
+            updateScore();
             continue;
         }
 
@@ -102,6 +113,13 @@ int Firejam::Game::update(sf::Time delta)
     return SUCCESS;
 }
 
+int Firejam::Game::updateScore()
+{
+    _scoreText.setString(SCORE + std::to_string(_score));
+
+    return SUCCESS;
+}
+
 int Firejam::Game::render(void)
 {
     _window.clear();
@@ -116,6 +134,7 @@ int Firejam::Game::render(void)
         _window.draw(obstacle.getSprite());
     }
 
+    _window.draw(_scoreText);
     _window.display();
 
     return SUCCESS;
