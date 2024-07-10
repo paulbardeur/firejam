@@ -11,6 +11,8 @@
     #define SUCCESS 0
     #define ERROR 84
 
+    #define NB_ARGUMENTS 1
+
     #define HELP_MESSAGE "USAGE: ./firebase"
 
 #endif /* !FIREJAM_HPP_ */
