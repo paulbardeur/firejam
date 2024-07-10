@@ -10,7 +10,7 @@
 #include "Game.hpp"
 #include "Firejam.hpp"
 
-Firejam::Game::Game(void): _window(DEFAULT_WINDOW), _isRunning(true)
+Firejam::Game::Game(void): _window(DEFAULT_WINDOW), _view(DEFAULT_VIEW), _isRunning(true)
 {
     initGame();
 }
@@ -70,6 +70,11 @@ int Firejam::Game::processInput(void)
 int Firejam::Game::update(sf::Time delta)
 {
     _player.move(delta);
+
+    sf::Vector2f playerPosition = _player.getSprite().getPosition();
+
+    _view.setCenter(playerPosition.x + VIEW_DELTA_X, _view.getCenter().y);
+    _window.setView(_view);
 
     for (auto &gem: _gems) {
         if (_player.getBounds().intersects(gem.get()->getBounds())) {

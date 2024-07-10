@@ -18,6 +18,9 @@
     #include "Environment.hpp"
 
     #define DEFAULT_WINDOW sf::VideoMode(800, 600), "Firejam"
+    #define DEFAULT_VIEW sf::FloatRect(0, 0, 800, 600)
+
+    #define VIEW_DELTA_X 300
 
 namespace Firejam {
 
@@ -39,6 +42,8 @@ namespace Firejam {
 
             Player _player;
             sf::RenderWindow _window;
+
+            sf::View _view;
 
             bool _isRunning;
 
