@@ -34,15 +34,14 @@ namespace Firejame {
             void update(sf::Time delta);
             void render();
 
-            Player player;
+            Player _player;
+            sf::RenderWindow _window;
 
-            bool isRunning;
-    
-            sf::RenderWindow window;
+            bool _isRunning;
 
-            std::vector<Gem> gems;
-            std::vector<Obstacles> obstacles;
-            std::vector<Environment> environments;
+            std::vector<Gem> _gems;
+            std::vector<Obstacle> _obstacles;
+            std::vector<Environment> _environments;
 
     };
 
