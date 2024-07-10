@@ -10,23 +10,26 @@
 
     #include <SFML/Graphics.hpp>
 
-namespace Firejame {
+    #include "Player.hpp"
 
-    enum GemType { FIRE, ICE };
+    #define GEM_FIRE_TEXTURE "assets/gem_fire.png"
+    #define GEM_ICE_TEXTURE "assets/gem_ice.png"
+
+namespace Firejam {
 
     class Gem {
 
         public:
 
-            Gem(GemType type, sf::Vector2f position);
+            Gem(Type type, sf::Vector2f position);
 
-            GemType getType() const;
-            sf::FloatRect getBounds() const;
-            sf::Sprite getSprite() const;
- 
+            Type getType() const { return _type; };
+            sf::FloatRect getBounds() const { return _sprite.getGlobalBounds(); };
+            sf::Sprite getSprite() const { return _sprite; };
+
         private:
 
-            GemType _type;
+            Type _type;
             sf::Sprite _sprite;
             sf::Texture _texture;
 
