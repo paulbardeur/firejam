@@ -10,23 +10,23 @@
 
     #include <SFML/Graphics.hpp>
 
-namespace Firejame {
+    #include "Player.hpp"
 
-    enum class EnvironmentType { FIRE, ICE };
+namespace Firejam {
 
     class Environment {
 
         public:
 
-            Environment(EnvironmentType type, sf::FloatRect area);
+            Environment(Type type, sf::FloatRect area);
 
-            EnvironmentType getType() const;
-            sf::FloatRect getBounds() const;
-            sf::Sprite getSprite() const;
+            Type getType() const { return _type; };
+            sf::FloatRect getBounds() const { return _shape.getGlobalBounds(); };
+            sf::RectangleShape getSprite() const { return _shape; };
  
         private:
 
-            EnvironmentType _type;
+            Type _type;
             sf::RectangleShape _shape;
 
     };
