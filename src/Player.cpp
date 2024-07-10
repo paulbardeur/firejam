@@ -35,7 +35,6 @@ int Firejam::Player::move(sf::Time delta)
 
     _sprite.move(_speed * time, NONE);
 
-
     if (_isJumping) {
 
         _sprite.move(NONE, _velocity * time);

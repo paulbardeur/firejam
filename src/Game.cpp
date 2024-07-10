@@ -19,6 +19,18 @@ int Firejam::Game::initGame(void)
 {
     _gems.push_back(std::make_shared<Gem>(Type::FIRE, sf::Vector2f(300, 450)));
     _gems.push_back(std::make_shared<Gem>(Type::ICE, sf::Vector2f(600, 450)));
+    _gems.push_back(std::make_shared<Gem>(Type::ICE, sf::Vector2f(900, 450)));
+    _gems.push_back(std::make_shared<Gem>(Type::FIRE, sf::Vector2f(1200, 450)));
+    _gems.push_back(std::make_shared<Gem>(Type::ICE, sf::Vector2f(1300, 450)));
+    _gems.push_back(std::make_shared<Gem>(Type::FIRE, sf::Vector2f(1400, 450)));
+    _gems.push_back(std::make_shared<Gem>(Type::ICE, sf::Vector2f(2300, 450)));
+    _gems.push_back(std::make_shared<Gem>(Type::FIRE, sf::Vector2f(2300, 450)));
+    _gems.push_back(std::make_shared<Gem>(Type::ICE, sf::Vector2f(2400, 450)));
+    _gems.push_back(std::make_shared<Gem>(Type::FIRE, sf::Vector2f(2300, 450)));
+    _gems.push_back(std::make_shared<Gem>(Type::ICE, sf::Vector2f(3300, 450)));
+    _gems.push_back(std::make_shared<Gem>(Type::FIRE, sf::Vector2f(3300, 450)));
+    _gems.push_back(std::make_shared<Gem>(Type::FIRE, sf::Vector2f(3400, 450)));
+    _gems.push_back(std::make_shared<Gem>(Type::ICE, sf::Vector2f(3300, 450)));
 
     // obstacles.push_back(Obstacle(sf::Vector2f(400, 500)));
     // environments.push_back(Environment(EnvironmentType::FIRE, sf::FloatRect(0, 550, 800, 50)));
@@ -83,7 +95,7 @@ int Firejam::Game::update(sf::Time delta)
     sf::Vector2f playerPosition = _player.getSprite().getPosition();
 
     _view.setCenter(playerPosition.x + VIEW_DELTA_X, _view.getCenter().y);
-    //_window.setView(_view);
+    _window.setView(_view);
 
     auto gem = _gems.begin();
 
