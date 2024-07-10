@@ -76,10 +76,18 @@ int Firejam::Game::update(sf::Time delta)
     _view.setCenter(playerPosition.x + VIEW_DELTA_X, _view.getCenter().y);
     _window.setView(_view);
 
-    for (auto &gem: _gems) {
-        if (_player.getBounds().intersects(gem.get()->getBounds())) {
-            _player.collectGem(gem.get()->getType());
+    auto gem = _gems.begin();
+
+    while (gem != _gems.end()) {
+
+        if (_player.getBounds().intersects(gem->get()->getBounds())) {
+            _player.collectGem(gem->get()->getType());
+            gem = _gems.erase(gem);
+            continue;
         }
+
+        gem++;
+
     }
 
     for (auto &env: _environments) {
