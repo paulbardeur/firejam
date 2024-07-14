@@ -8,7 +8,7 @@
 #include <string>
 #include <iostream>
 
-#include "Game.hpp"
+#include "Menu.hpp"
 #include "Firejam.hpp"
 
 static int help(void)
@@ -20,10 +20,10 @@ static int help(void)
 
 int main(int ac, char **)
 {
-    Firejam::Game game;
+    Firejam::Menu menu;
 
     if (ac == NB_ARGUMENTS) {
-        return game.run();
+        return menu.run();
     }
 
     return help();
