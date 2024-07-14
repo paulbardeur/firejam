@@ -37,7 +37,7 @@ namespace Firejam {
             int move(sf::Time delta);
             int jump();
 
-            bool handleCollision(const sf::FloatRect &bounds);
+            bool handleCollision(const sf::FloatRect &bounds, bool end);
 
             Type getState() const { return _state; };
             sf::Sprite getSprite() const { return _sprite; };

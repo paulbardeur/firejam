@@ -9,11 +9,10 @@
 
 #include "Game.hpp"
 #include "Firejam.hpp"
+#include "LevelLoader.hpp"
 
-Firejam::Game::Game(void): _window(DEFAULT_WINDOW), _view(DEFAULT_VIEW), _isRunning(true), _score(NONE)
+Firejam::Game::Game(int level): _view(DEFAULT_VIEW), _isRunning(true), _score(NONE), _currentLevel(level), _infiniteMode(level == NONE)
 {
-    initGame();
-
     _scoreFont.loadFromFile(SCORE_FONT);
 
     _scoreText.setFont(_scoreFont);
@@ -27,69 +26,72 @@ Firejam::Game::Game(void): _window(DEFAULT_WINDOW), _view(DEFAULT_VIEW), _isRunn
     _background.setTexture(_backgroundTexture);
 }
 
-int Firejam::Game::initGame(void)
+int Firejam::Game::loadLevel()
 {
-    _gems.push_back(std::make_shared<Gem>(Type::FIRE, sf::Vector2f(300, 450)));
-    _gems.push_back(std::make_shared<Gem>(Type::ICE, sf::Vector2f(600, 450)));
-    _gems.push_back(std::make_shared<Gem>(Type::ICE, sf::Vector2f(900, 450)));
-    _gems.push_back(std::make_shared<Gem>(Type::FIRE, sf::Vector2f(1200, 450)));
-    _gems.push_back(std::make_shared<Gem>(Type::ICE, sf::Vector2f(1300, 450)));
-    _gems.push_back(std::make_shared<Gem>(Type::FIRE, sf::Vector2f(1400, 450)));
-    _gems.push_back(std::make_shared<Gem>(Type::ICE, sf::Vector2f(2300, 450)));
-    _gems.push_back(std::make_shared<Gem>(Type::FIRE, sf::Vector2f(2300, 450)));
-    _gems.push_back(std::make_shared<Gem>(Type::ICE, sf::Vector2f(2400, 450)));
-    _gems.push_back(std::make_shared<Gem>(Type::FIRE, sf::Vector2f(2300, 450)));
-    _gems.push_back(std::make_shared<Gem>(Type::ICE, sf::Vector2f(3300, 450)));
-    _gems.push_back(std::make_shared<Gem>(Type::FIRE, sf::Vector2f(3300, 450)));
-    _gems.push_back(std::make_shared<Gem>(Type::FIRE, sf::Vector2f(3400, 450)));
-    _gems.push_back(std::make_shared<Gem>(Type::ICE, sf::Vector2f(3300, 450)));
+    _gems.clear();
+    _obstacles.clear();
+    _environments.clear();
 
-    _environments.push_back(std::make_shared<Environment>(Type::FIRE, sf::Vector2f(700, 500)));
-    _environments.push_back(std::make_shared<Environment>(Type::FIRE, sf::Vector2f(900, 500)));
-    _environments.push_back(std::make_shared<Environment>(Type::FIRE, sf::Vector2f(1200, 500)));
+    Firejam::LevelLoader::loadLevel(_currentLevel, _gems, _obstacles, _environments);
 
-    _obstacles.push_back(std::make_shared<Obstacle>(sf::Vector2f(400, 500)));
-    _obstacles.push_back(std::make_shared<Obstacle>(sf::Vector2f(450, 500)));
-    _obstacles.push_back(std::make_shared<Obstacle>(sf::Vector2f(500, 500)));
-    _obstacles.push_back(std::make_shared<Obstacle>(sf::Vector2f(550, 500)));
-    _obstacles.push_back(std::make_shared<Obstacle>(sf::Vector2f(550, 400)));
-    _obstacles.push_back(std::make_shared<Obstacle>(sf::Vector2f(600, 400)));
+    _infiniteMode = false;
+    _player = std::make_shared<Player>();
+    _score = NONE;
+    _isRunning = true;
 
     return SUCCESS;
 }
 
-int Firejam::Game::run(void)
+int Firejam::Game::startInfiniteMode()
+{
+    _gems.clear();
+    _obstacles.clear();
+    _environments.clear();
+
+    // TODO PAUL // GENERATE INFINITY VECTOR OF OBJECTS //
+
+    _infiniteMode = true;
+    _player = std::make_shared<Player>();
+    _score = NONE;
+    _isRunning = true;
+
+    return SUCCESS;
+}
+
+int Firejam::Game::run(sf::RenderWindow &window)
 {
     sf::Clock clock;
 
-    while (_window.isOpen()) {
+    loadLevel();
 
-        processInput();
+    while (window.isOpen()) {
+
+        processInput(window);
 
         sf::Time delta = clock.restart();
 
-        update(delta);
-        render();
+        update(delta, window);
+        render(window);
 
     }
 
-    return SUCCESS;
+    return _score;
 }
 
-int Firejam::Game::processInput(void)
+int Firejam::Game::processInput(sf::RenderWindow &window)
 {
     sf::Event event;
 
-    while (_window.pollEvent(event)) {
+    while (window.pollEvent(event)) {
 
         if (event.type == sf::Event::Closed) {
-            _window.close();
+            window.close();
         }
 
         if (event.type == sf::Event::KeyPressed) {
 
             if (event.key.code == sf::Keyboard::Space) {
-                _player.jump();
+                _player.get()->jump();
             }
 
         }
@@ -99,14 +101,18 @@ int Firejam::Game::processInput(void)
     return SUCCESS;
 }
 
-int Firejam::Game::update(sf::Time delta)
+int Firejam::Game::update(sf::Time delta, sf::RenderWindow &window)
 {
-    _player.move(delta);
+    if (!_isRunning) {
+        return SUCCESS;
+    }
 
-    sf::Vector2f playerPosition = _player.getSprite().getPosition();
+    _player.get()->move(delta);
+
+    sf::Vector2f playerPosition = _player.get()->getSprite().getPosition();
 
     _view.setCenter(playerPosition.x + VIEW_DELTA_X, _view.getCenter().y);
-    _window.setView(_view);
+    window.setView(_view);
 
     _scoreText.setPosition(_view.getCenter().x - 380, _view.getCenter().y - 285);
     _background.setPosition(_view.getCenter().x - 400, _view.getCenter().y - 300);
@@ -115,8 +121,8 @@ int Firejam::Game::update(sf::Time delta)
 
     while (gem != _gems.end()) {
 
-        if (_player.getBounds().intersects(gem->get()->getBounds())) {
-            _player.collectGem(gem->get()->getType());
+        if (_player.get()->getBounds().intersects(gem->get()->getBounds())) {
+            _player.get()->collectGem(gem->get()->getType());
             gem = _gems.erase(gem);
             _score += ONE_POINT;
             updateScore();
@@ -128,18 +134,18 @@ int Firejam::Game::update(sf::Time delta)
     }
 
     for (auto &env: _environments) {
-        if (_player.getBounds().intersects(env.get()->getBounds())) {
-            if (_player.getState() != env.get()->getType()) {
+        if (_player.get()->getBounds().intersects(env.get()->getBounds())) {
+            if (_player.get()->getState() != env.get()->getType()) {
                 _isRunning = false;
-                _window.close();
+                window.close();
             }
         }
     }
 
     for (auto &obstacle: _obstacles) {
-        if (_player.handleCollision(obstacle.get()->getBounds())) {
+        if (_player.get()->handleCollision(obstacle.get()->getBounds(), obstacle.get()->getEnd())) {
             _isRunning = false;
-            _window.close();
+            window.close();
         }
     }
 
@@ -153,18 +159,18 @@ int Firejam::Game::updateScore()
     return SUCCESS;
 }
 
-int Firejam::Game::render(void)
+int Firejam::Game::render(sf::RenderWindow &window)
 {
-    _window.clear();
+    window.clear();
 
-    _window.draw(_background);
+    window.draw(_background);
 
     for (auto &obstacle : _obstacles) {
-        _window.draw(obstacle.get()->getShape());
+        window.draw(obstacle.get()->getShape());
     }
 
     for (auto &env: _environments) {
-        _window.draw(env.get()->getSprite());
+        window.draw(env.get()->getSprite());
 
         sf::RectangleShape envHitbox;
         envHitbox.setPosition(env->getBounds().left, env->getBounds().top);
@@ -172,11 +178,11 @@ int Firejam::Game::render(void)
         envHitbox.setFillColor(sf::Color::Transparent);
         envHitbox.setOutlineColor(sf::Color::White);
         envHitbox.setOutlineThickness(1.0f);
-        _window.draw(envHitbox);
+        window.draw(envHitbox);
     }
 
     for (auto &gem : _gems) {
-        _window.draw(gem.get()->getSprite());
+        window.draw(gem.get()->getSprite());
 
         sf::RectangleShape gemHitbox;
         gemHitbox.setPosition(gem->getBounds().left, gem->getBounds().top);
@@ -184,21 +190,21 @@ int Firejam::Game::render(void)
         gemHitbox.setFillColor(sf::Color::Transparent);
         gemHitbox.setOutlineColor(sf::Color::White);
         gemHitbox.setOutlineThickness(1.0f);
-        _window.draw(gemHitbox);
+        window.draw(gemHitbox);
     }
 
-    _window.draw(_player.getSprite());
+    window.draw(_player.get()->getSprite());
 
     sf::RectangleShape playerHitbox;
-    playerHitbox.setPosition(_player.getBounds().left, _player.getBounds().top);
-    playerHitbox.setSize(sf::Vector2f(_player.getBounds().width, _player.getBounds().height));
+    playerHitbox.setPosition(_player.get()->getBounds().left, _player.get()->getBounds().top);
+    playerHitbox.setSize(sf::Vector2f(_player.get()->getBounds().width, _player.get()->getBounds().height));
     playerHitbox.setFillColor(sf::Color::Transparent);
     playerHitbox.setOutlineColor(sf::Color::White);
     playerHitbox.setOutlineThickness(1.0f);
-    _window.draw(playerHitbox);
+    window.draw(playerHitbox);
 
-    _window.draw(_scoreText);
-    _window.display();
+    window.draw(_scoreText);
+    window.display();
 
     return SUCCESS;
 }

@@ -67,10 +67,14 @@ int Firejam::Player::jump()
     return SUCCESS;
 }
 
-bool Firejam::Player::handleCollision(const sf::FloatRect &bounds)
+bool Firejam::Player::handleCollision(const sf::FloatRect &bounds, bool end)
 {
     if (!getBounds().intersects(bounds)) {
         return false;
+    }
+
+    if (end) {
+        return true;
     }
 
     _onObstacle = true;
@@ -89,7 +93,6 @@ bool Firejam::Player::handleCollision(const sf::FloatRect &bounds)
     }
 
     if (bounds.top < getBounds().top && getBounds().top < bounds.top + bounds.height) {
-        std::cout << "passer ici\n";
         return true;
     }
 

@@ -17,9 +17,11 @@ MAIN		=	$(SRC_DIR)/Main.cpp				\
 
 SRC			=	$(SRC_DIR)/Gem.cpp				\
 				$(SRC_DIR)/Game.cpp				\
+				$(SRC_DIR)/Menu.cpp				\
 				$(SRC_DIR)/Player.cpp			\
 				$(SRC_DIR)/Obstacle.cpp			\
 				$(SRC_DIR)/Environment.cpp		\
+				$(SRC_DIR)/LevelLoader.cpp		\
 
 SRC_OBJ		=	$(SRC:.cpp=.o)					\
 				$(MAIN:.cpp=.o)					\

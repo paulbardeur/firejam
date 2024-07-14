@@ -17,7 +17,6 @@
     #include "Obstacle.hpp"
     #include "Environment.hpp"
 
-    #define DEFAULT_WINDOW sf::VideoMode(800, 600), "Firejam"
     #define DEFAULT_VIEW sf::FloatRect(0, 0, 800, 600)
 
     #define VIEW_DELTA_X 300
@@ -35,27 +34,29 @@ namespace Firejam {
 
         public:
 
-            Game();
+            Game(int nbLevel);
 
-            int run();
+            int run(sf::RenderWindow &window);
+            int loadLevel();
+            int startInfiniteMode();
 
         private:
 
-            int initGame();
-
-            int processInput();
-            int update(sf::Time delta);
+            int processInput(sf::RenderWindow &window);
+            int update(sf::Time delta, sf::RenderWindow &window);
             int updateScore();
-            int render();
+            int render(sf::RenderWindow &window);
 
-            Player _player;
-            sf::RenderWindow _window;
+            std::shared_ptr<Player> _player;
 
             sf::View _view;
 
             bool _isRunning;
 
-            size_t _score;
+            int _score;
+            int _currentLevel;
+            bool _infiniteMode;
+
             sf::Font _scoreFont;
             sf::Text _scoreText;
 

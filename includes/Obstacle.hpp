@@ -18,14 +18,16 @@ namespace Firejam {
 
         public:
 
-            Obstacle(sf::Vector2f position);
+            Obstacle(sf::Vector2f position, bool end);
 
             sf::FloatRect getBounds() const { return _shape.getGlobalBounds(); };
             sf::RectangleShape getShape() const { return _shape; };
+            bool getEnd() const { return _end; };
  
         private:
 
             sf::RectangleShape _shape;
+            bool _end;
 
     };
 
