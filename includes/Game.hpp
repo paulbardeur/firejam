@@ -23,6 +23,7 @@
     #define VIEW_DELTA_X 300
 
     #define SCORE_FONT "assets/stocky.ttf"
+    #define BACKGROUND_ASSET "assets/background.png"
     #define SCORE "Score: "
     #define SCORE_POSITION 12, 12
     #define SCORE_SIZE 28
@@ -57,6 +58,9 @@ namespace Firejam {
             size_t _score;
             sf::Font _scoreFont;
             sf::Text _scoreText;
+
+            sf::Sprite _background;
+            sf::Texture _backgroundTexture;
 
             std::vector<std::shared_ptr<Gem>> _gems;
             std::vector<std::shared_ptr<Obstacle>> _obstacles;

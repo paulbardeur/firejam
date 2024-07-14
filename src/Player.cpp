@@ -73,8 +73,10 @@ bool Firejam::Player::handleCollision(const sf::FloatRect &bounds)
         return false;
     }
 
+    _onObstacle = true;
+
     if (_velocity.y > NONE && _sprite.getPosition().y + getBounds().height - _velocity.y * 0.1f <= bounds.top) {
-        _sprite.setPosition(_sprite.getPosition().x, bounds.top - getBounds().height - 15);
+        _sprite.setPosition(_sprite.getPosition().x, bounds.top - getBounds().height - 14);
         _velocity.y = NONE;
         _onGround = false;
         _onObstacle = true;
@@ -82,11 +84,12 @@ bool Firejam::Player::handleCollision(const sf::FloatRect &bounds)
         return false;
     }
 
-    if (_sprite.getPosition().x < bounds.left) {
+    if (getBounds().left < bounds.left && getBounds().height > bounds.top - 1) {
         return true;
     }
 
-    if (_sprite.getPosition().y < bounds.top + bounds.height ) {
+    if (bounds.top < getBounds().top && getBounds().top < bounds.top + bounds.height) {
+        std::cout << "passer ici\n";
         return true;
     }
 

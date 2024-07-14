@@ -13,6 +13,18 @@
 Firejam::Game::Game(void): _window(DEFAULT_WINDOW), _view(DEFAULT_VIEW), _isRunning(true), _score(NONE)
 {
     initGame();
+
+    _scoreFont.loadFromFile(SCORE_FONT);
+
+    _scoreText.setFont(_scoreFont);
+    _scoreText.setCharacterSize(SCORE_SIZE);
+    _scoreText.setFillColor(sf::Color::White);
+    _scoreText.setPosition(SCORE_POSITION);
+
+    updateScore();
+
+    _backgroundTexture.loadFromFile(BACKGROUND_ASSET);
+    _background.setTexture(_backgroundTexture);
 }
 
 int Firejam::Game::initGame(void)
@@ -42,15 +54,6 @@ int Firejam::Game::initGame(void)
     _obstacles.push_back(std::make_shared<Obstacle>(sf::Vector2f(550, 500)));
     _obstacles.push_back(std::make_shared<Obstacle>(sf::Vector2f(550, 400)));
     _obstacles.push_back(std::make_shared<Obstacle>(sf::Vector2f(600, 400)));
-
-    _scoreFont.loadFromFile(SCORE_FONT);
-
-    _scoreText.setFont(_scoreFont);
-    _scoreText.setCharacterSize(SCORE_SIZE);
-    _scoreText.setFillColor(sf::Color::Red);
-    _scoreText.setPosition(SCORE_POSITION);
-
-    updateScore();
 
     return SUCCESS;
 }
@@ -106,6 +109,7 @@ int Firejam::Game::update(sf::Time delta)
     _window.setView(_view);
 
     _scoreText.setPosition(_view.getCenter().x - 380, _view.getCenter().y - 285);
+    _background.setPosition(_view.getCenter().x - 400, _view.getCenter().y - 300);
 
     auto gem = _gems.begin();
 
@@ -152,6 +156,8 @@ int Firejam::Game::updateScore()
 int Firejam::Game::render(void)
 {
     _window.clear();
+
+    _window.draw(_background);
 
     for (auto &obstacle : _obstacles) {
         _window.draw(obstacle.get()->getShape());
