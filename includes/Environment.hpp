@@ -18,16 +18,18 @@ namespace Firejam {
 
         public:
 
-            Environment(Type type, sf::FloatRect area);
+            Environment(Type type, sf::Vector2f position);
 
             Type getType() const { return _type; };
-            sf::FloatRect getBounds() const { return _shape.getGlobalBounds(); };
-            sf::RectangleShape getSprite() const { return _shape; };
+            sf::Sprite getSprite() const { return _sprite; };
+
+            sf::FloatRect getBounds() const;
  
         private:
 
             Type _type;
-            sf::RectangleShape _shape;
+            sf::Sprite _sprite;
+            sf::Texture _texture;
 
     };
 

@@ -24,8 +24,8 @@ namespace Firejam {
             Gem(Type type, sf::Vector2f position);
 
             Type getType() const { return _type; };
-            sf::FloatRect getBounds() const { return _sprite.getGlobalBounds(); };
             sf::Sprite getSprite() const { return _sprite; };
+            sf::FloatRect getBounds() const;
 
         private:
 

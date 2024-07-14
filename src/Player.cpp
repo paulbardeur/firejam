@@ -76,3 +76,15 @@ int Firejam::Player::updateSprite()
 
     return SUCCESS;
 }
+
+sf::FloatRect Firejam::Player::getBounds() const
+{
+    sf::FloatRect rectangle = _sprite.getGlobalBounds();
+
+    rectangle.height -= 30;
+    rectangle.top += 15;
+    rectangle.width -= 20;
+    rectangle.left += 10;
+
+    return rectangle;
+}

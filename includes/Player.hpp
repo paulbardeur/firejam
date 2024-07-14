@@ -38,8 +38,8 @@ namespace Firejam {
             int jump();
 
             Type getState() const { return _state; };
-            sf::FloatRect getBounds() const { return _sprite.getGlobalBounds(); };
             sf::Sprite getSprite() const { return _sprite; };
+            sf::FloatRect getBounds() const;
 
         private:
 

@@ -32,8 +32,9 @@ int Firejam::Game::initGame(void)
     _gems.push_back(std::make_shared<Gem>(Type::FIRE, sf::Vector2f(3400, 450)));
     _gems.push_back(std::make_shared<Gem>(Type::ICE, sf::Vector2f(3300, 450)));
 
-    // obstacles.push_back(Obstacle(sf::Vector2f(400, 500)));
-    // environments.push_back(Environment(EnvironmentType::FIRE, sf::FloatRect(0, 550, 800, 50)));
+    _environments.push_back(std::make_shared<Environment>(Type::FIRE, sf::Vector2f(700, 500)));
+    _environments.push_back(std::make_shared<Environment>(Type::FIRE, sf::Vector2f(900, 500)));
+    _environments.push_back(std::make_shared<Environment>(Type::FIRE, sf::Vector2f(1200, 500)));
 
     _scoreFont.loadFromFile(SCORE_FONT);
 
@@ -116,8 +117,8 @@ int Firejam::Game::update(sf::Time delta)
     }
 
     for (auto &env: _environments) {
-        if (_player.getBounds().intersects(env.getBounds())) {
-            if (_player.getState() != env.getType()) {
+        if (_player.getBounds().intersects(env.get()->getBounds())) {
+            if (_player.getState() != env.get()->getType()) {
                 _isRunning = false;
                 _window.close();
             }
@@ -138,15 +139,43 @@ int Firejam::Game::render(void)
 {
     _window.clear();
 
-    _window.draw(_player.getSprite());
+    for (auto &obstacle : _obstacles) {
+        _window.draw(obstacle.get()->getShape());
+    }
+
+    for (auto &env: _environments) {
+        _window.draw(env.get()->getSprite());
+
+        sf::RectangleShape envHitbox;
+        envHitbox.setPosition(env->getBounds().left, env->getBounds().top);
+        envHitbox.setSize(sf::Vector2f(env->getBounds().width, env->getBounds().height));
+        envHitbox.setFillColor(sf::Color::Transparent);
+        envHitbox.setOutlineColor(sf::Color::White);
+        envHitbox.setOutlineThickness(1.0f);
+        _window.draw(envHitbox);
+    }
 
     for (auto &gem : _gems) {
         _window.draw(gem.get()->getSprite());
+
+        sf::RectangleShape gemHitbox;
+        gemHitbox.setPosition(gem->getBounds().left, gem->getBounds().top);
+        gemHitbox.setSize(sf::Vector2f(gem->getBounds().width, gem->getBounds().height));
+        gemHitbox.setFillColor(sf::Color::Transparent);
+        gemHitbox.setOutlineColor(sf::Color::White);
+        gemHitbox.setOutlineThickness(1.0f);
+        _window.draw(gemHitbox);
     }
 
-    for (auto &obstacle : _obstacles) {
-        _window.draw(obstacle.getSprite());
-    }
+    _window.draw(_player.getSprite());
+
+    sf::RectangleShape playerHitbox;
+    playerHitbox.setPosition(_player.getBounds().left, _player.getBounds().top);
+    playerHitbox.setSize(sf::Vector2f(_player.getBounds().width, _player.getBounds().height));
+    playerHitbox.setFillColor(sf::Color::Transparent);
+    playerHitbox.setOutlineColor(sf::Color::White);
+    playerHitbox.setOutlineThickness(1.0f);
+    _window.draw(playerHitbox);
 
     _window.draw(_scoreText);
     _window.display();

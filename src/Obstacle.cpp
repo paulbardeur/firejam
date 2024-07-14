@@ -9,8 +9,9 @@
 
 Firejam::Obstacle::Obstacle(sf::Vector2f position)
 {
-    _texture.loadFromFile(OBSTACLE_TEXTURE);
-
-    _sprite.setTexture(_texture);
-    _sprite.setPosition(position);
+    _shape.setSize(sf::Vector2f(45, 45));
+    _shape.setFillColor(sf::Color::Blue);
+    _shape.setOutlineColor(sf::Color::White);
+    _shape.setOutlineThickness(3);
+    _shape.setPosition(position);
 }

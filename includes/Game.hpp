@@ -59,8 +59,8 @@ namespace Firejam {
             sf::Text _scoreText;
 
             std::vector<std::shared_ptr<Gem>> _gems;
-            std::vector<Obstacle> _obstacles;
-            std::vector<Environment> _environments;
+            std::vector<std::shared_ptr<Obstacle>> _obstacles;
+            std::vector<std::shared_ptr<Environment>> _environments;
 
     };
 

@@ -7,17 +7,25 @@
 
 #include "Environment.hpp"
 
-Firejam::Environment::Environment(Type type, sf::FloatRect area) : _type(type)
+Firejam::Environment::Environment(Type type, sf::Vector2f position): _type(type)
 {
-    _shape.setPosition(area.left, area.top);
-    _shape.setSize(sf::Vector2f(area.width, area.height));
-
     if (type == Type::FIRE) {
-        _shape.setFillColor(sf::Color::Red);
+        _texture.loadFromFile("assets/point_fire.png");
     }
 
     if (type == Type::ICE) {
-        _shape.setFillColor(sf::Color::Blue);
+        _texture.loadFromFile("assets/point_ice.png");
     }
 
+    _sprite.setPosition(position);
+    _sprite.setTexture(_texture);
+}
+
+sf::FloatRect Firejam::Environment::getBounds() const
+{
+    sf::FloatRect rectangle = _sprite.getGlobalBounds();
+
+    rectangle.top += 5;
+
+    return rectangle;
 }

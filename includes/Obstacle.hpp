@@ -20,13 +20,12 @@ namespace Firejam {
 
             Obstacle(sf::Vector2f position);
 
-            sf::FloatRect getBounds() const { return _sprite.getGlobalBounds(); };
-            sf::Sprite getSprite() const { return _sprite; };
+            sf::FloatRect getBounds() const { return _shape.getGlobalBounds(); };
+            sf::RectangleShape getShape() const { return _shape; };
  
         private:
 
-            sf::Sprite _sprite;
-            sf::Texture _texture;
+            sf::RectangleShape _shape;
 
     };
 
