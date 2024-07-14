@@ -5,10 +5,12 @@
 ** Player
 */
 
+#include <iostream>
+
 #include "Player.hpp"
 #include "Firejam.hpp"
 
-Firejam::Player::Player(void): _state(Type::FIRE), _speed(DEFAULT_SPEED), _velocity(NONE), _isJumping(false)
+Firejam::Player::Player(void): _state(Type::FIRE), _speed(DEFAULT_SPEED), _velocity(200, 0), _isJumping(false), _onGround(true), _onObstacle(false)
 {
     _fireTexture.loadFromFile(FIRE_TEXTURE);
     _iceTexture.loadFromFile(ICE_TEXTURE);
@@ -33,35 +35,62 @@ int Firejam::Player::move(sf::Time delta)
 {
     float time = delta.asSeconds();
 
-    _sprite.move(_speed * time, NONE);
+    if (!_onGround && !_onObstacle) {
+        _velocity.y += GRAVITY * time;
+    }
 
-    if (_isJumping) {
+    sf::Vector2f movement(_velocity.x * time, _velocity.y * time);
+    _sprite.move(_velocity * time);
 
-        _sprite.move(NONE, _velocity * time);
+    _onGround = false;
+    _onObstacle = false;
 
-        _velocity += GRAVITY * time;
-
-        if (_sprite.getPosition().y >= GROUND_LEVEL) {
-            _sprite.setPosition(_sprite.getPosition().x, GROUND_LEVEL);
-            _isJumping = false;
-        }
-
+    if (_sprite.getPosition().y >= GROUND_LEVEL) {
+        _sprite.setPosition(_sprite.getPosition().x, GROUND_LEVEL);
+        _velocity.y = NONE;
+        _onGround = true;
+        _isJumping = false;
     }
 
     return SUCCESS;
 }
 
-
 int Firejam::Player::jump()
 {
-    if (_isJumping) {
-        return SUCCESS;
+    if (_onGround || _onObstacle) {
+        _velocity.y = JUMP_FORCE;
+        _onGround = false;
+        _onObstacle = false;
+        _isJumping = true;
     }
 
-    _isJumping = true;
-    _velocity = JUMP_FORCE;
-
     return SUCCESS;
+}
+
+bool Firejam::Player::handleCollision(const sf::FloatRect &bounds)
+{
+    if (!getBounds().intersects(bounds)) {
+        return false;
+    }
+
+    if (_velocity.y > NONE && _sprite.getPosition().y + getBounds().height - _velocity.y * 0.1f <= bounds.top) {
+        _sprite.setPosition(_sprite.getPosition().x, bounds.top - getBounds().height - 15);
+        _velocity.y = NONE;
+        _onGround = false;
+        _onObstacle = true;
+        _isJumping = false;
+        return false;
+    }
+
+    if (_sprite.getPosition().x < bounds.left) {
+        return true;
+    }
+
+    if (_sprite.getPosition().y < bounds.top + bounds.height ) {
+        return true;
+    }
+
+    return false;
 }
 
 int Firejam::Player::updateSprite()

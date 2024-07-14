@@ -36,6 +36,13 @@ int Firejam::Game::initGame(void)
     _environments.push_back(std::make_shared<Environment>(Type::FIRE, sf::Vector2f(900, 500)));
     _environments.push_back(std::make_shared<Environment>(Type::FIRE, sf::Vector2f(1200, 500)));
 
+    _obstacles.push_back(std::make_shared<Obstacle>(sf::Vector2f(400, 500)));
+    _obstacles.push_back(std::make_shared<Obstacle>(sf::Vector2f(450, 500)));
+    _obstacles.push_back(std::make_shared<Obstacle>(sf::Vector2f(500, 500)));
+    _obstacles.push_back(std::make_shared<Obstacle>(sf::Vector2f(550, 500)));
+    _obstacles.push_back(std::make_shared<Obstacle>(sf::Vector2f(550, 400)));
+    _obstacles.push_back(std::make_shared<Obstacle>(sf::Vector2f(600, 400)));
+
     _scoreFont.loadFromFile(SCORE_FONT);
 
     _scoreText.setFont(_scoreFont);
@@ -122,6 +129,13 @@ int Firejam::Game::update(sf::Time delta)
                 _isRunning = false;
                 _window.close();
             }
+        }
+    }
+
+    for (auto &obstacle: _obstacles) {
+        if (_player.handleCollision(obstacle.get()->getBounds())) {
+            _isRunning = false;
+            _window.close();
         }
     }
 

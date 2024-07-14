@@ -37,6 +37,8 @@ namespace Firejam {
             int move(sf::Time delta);
             int jump();
 
+            bool handleCollision(const sf::FloatRect &bounds);
+
             Type getState() const { return _state; };
             sf::Sprite getSprite() const { return _sprite; };
             sf::FloatRect getBounds() const;
@@ -52,9 +54,11 @@ namespace Firejam {
             sf::Texture _iceTexture;
     
             float _speed;
-            float _velocity;
+            sf::Vector2f _velocity;
     
             bool _isJumping;
+            bool _onGround;
+            bool _onObstacle;
 
     };
 

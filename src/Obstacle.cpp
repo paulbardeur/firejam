@@ -9,7 +9,7 @@
 
 Firejam::Obstacle::Obstacle(sf::Vector2f position)
 {
-    _shape.setSize(sf::Vector2f(45, 45));
+    _shape.setSize(sf::Vector2f(50, 50));
     _shape.setFillColor(sf::Color::Blue);
     _shape.setOutlineColor(sf::Color::White);
     _shape.setOutlineThickness(3);
