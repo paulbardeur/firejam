@@ -97,8 +97,6 @@ int Firejam::Game::update(sf::Time delta)
     _view.setCenter(playerPosition.x + VIEW_DELTA_X, _view.getCenter().y);
     _window.setView(_view);
 
-    _scoreText.setPosition(_view.getCenter().x - 380, _view.getCenter().y - 285);
-
     auto gem = _gems.begin();
 
     while (gem != _gems.end()) {
