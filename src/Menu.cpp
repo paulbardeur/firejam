@@ -170,7 +170,7 @@ int Firejam::Menu::drawLevelButtons()
         rectangle.setFillColor(sf::Color::Black);
         rectangle.setOutlineThickness(3);
         rectangle.setOutlineColor(sf::Color::White);
-        rectangle.setSize(sf::Vector2f(340, 30));
+        rectangle.setSize(sf::Vector2f(360, 30));
         rectangle.setPosition(220, 120 + i * 40);
 
         _window.draw(rectangle);
