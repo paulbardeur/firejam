@@ -1,5 +1,5 @@
-Level 1 20
-Level 2 6
+Level 1 0
+Level 2 0
 Level 3 0
 Level 4 0
 Level 5 0

@@ -47,6 +47,8 @@ namespace Firejam {
             int updateScore();
             int render(sf::RenderWindow &window);
 
+            int generateInfiniteElements();
+
             std::shared_ptr<Player> _player;
 
             sf::View _view;
@@ -56,6 +58,10 @@ namespace Firejam {
             int _score;
             int _currentLevel;
             bool _infiniteMode;
+
+            float _lastGemPosition;
+            float _lastObstaclePosition;
+            float _lastEnvironmentPosition;
 
             sf::Font _scoreFont;
             sf::Text _scoreText;
