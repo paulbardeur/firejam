@@ -133,7 +133,7 @@ int Firejam::Game::run(sf::RenderWindow &window)
         loadLevel();
     }
 
-    while (window.isOpen()) {
+    while (window.isOpen() && _isRunning) {
 
         processInput(window);
 
@@ -143,6 +143,13 @@ int Firejam::Game::run(sf::RenderWindow &window)
         render(window);
 
     }
+
+    _player = std::make_shared<Player>();
+
+    sf::Vector2f playerPosition = _player.get()->getSprite().getPosition();
+
+    _view.setCenter(playerPosition.x + VIEW_DELTA_X, _view.getCenter().y);
+    window.setView(_view);
 
     return _score;
 }
@@ -206,7 +213,6 @@ int Firejam::Game::update(sf::Time delta, sf::RenderWindow &window)
         if (_player.get()->getBounds().intersects(env.get()->getBounds())) {
             if (_player.get()->getState() != env.get()->getType()) {
                 _isRunning = false;
-                window.close();
             }
         }
     }
@@ -214,7 +220,6 @@ int Firejam::Game::update(sf::Time delta, sf::RenderWindow &window)
     for (auto &obstacle: _obstacles) {
         if (_player.get()->handleCollision(obstacle.get()->getBounds(), obstacle.get()->getEnd())) {
             _isRunning = false;
-            window.close();
         }
     }
 
